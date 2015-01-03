@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -229,7 +228,7 @@ public class Analyzer {
 		
 		// create set of possible candidates applicable to given element
 		// set is automatically filtered to not contain duplicates
-		Set<RuleSet> candidates = new LinkedHashSet<RuleSet>();
+		Set<RuleSet> candidates = new HashSet<RuleSet>();
 
 		// match element classes
 		for (String cname : ElementUtil.elementClasses(e)) {
