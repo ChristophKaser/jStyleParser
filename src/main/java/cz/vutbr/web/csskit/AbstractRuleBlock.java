@@ -6,6 +6,7 @@ import cz.vutbr.web.css.StyleSheet;
 public class AbstractRuleBlock<T> extends AbstractRule<T> implements RuleBlock<T> {
 	
 	protected StyleSheet stylesheet;
+	protected int order = -1;
 	
 	public StyleSheet getStyleSheet()
 	{
@@ -17,10 +18,17 @@ public class AbstractRuleBlock<T> extends AbstractRule<T> implements RuleBlock<T
 		this.stylesheet = stylesheet;
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#hashCode()
-	 */
-	@Override
+	public int getOrder()
+    {
+        return order;
+    }
+
+    public void setOrder(int order)
+    {
+        this.order = order;
+    }
+
+    @Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
@@ -42,5 +50,8 @@ public class AbstractRuleBlock<T> extends AbstractRule<T> implements RuleBlock<T
 		return true;
 	}
 
+	public int compareTo(RuleBlock<?> o) throws ClassCastException {
+	    return getOrder() - o.getOrder();
+	}
 	
 }

@@ -49,6 +49,9 @@ public class Analyzer {
 	/** The style sheets to be processed. */
 	protected List<StyleSheet> sheets;
 	
+	/** Rule order counter */
+	protected int currentOrder;
+	
 	/**
 	 * Holds maps of declared rules classified into groups of
 	 * HolderItem (ID, CLASS, ELEMENT, OTHER).
@@ -258,8 +261,13 @@ public class Analyzer {
 		// others
 		candidates.addAll(holder.get(HolderItem.OTHER, null));
 
+		// transform to list to speed up traversal
+		// and sort rules in order as they were found in CSS definition
+		List<RuleSet> clist = new ArrayList<RuleSet>(candidates);
+		Collections.sort(clist);
+		
 		log.debug("Totally {} candidates.", candidates.size());
-		log.trace("With values: {}", candidates);
+		log.trace("With values: {}", clist);
 
 		// resulting list of declaration for this element with no pseudo-selectors (main list)(local cache)
 		List<Declaration> eldecl = new ArrayList<Declaration>();
@@ -268,7 +276,7 @@ public class Analyzer {
 		Set<PseudoDeclaration> pseudos = new HashSet<PseudoDeclaration>();
 
 		// for all candidates
-		for (RuleSet rule : candidates) {
+		for (RuleSet rule : clist) {
 			
 			StyleSheet sheet = rule.getStyleSheet();
 			if (sheet == null)
@@ -380,6 +388,7 @@ public class Analyzer {
 	protected void classifyAllSheets(MediaSpec mediaspec)
 	{
 	    rules = new Holder();
+	    currentOrder = 0;
 	    for (StyleSheet sheet : sheets)
 	        classifyRules(sheet, mediaspec);
 	}
@@ -508,8 +517,8 @@ public class Analyzer {
 	 * @param value
 	 *            Value to be inserted
 	 */
-	private void insertClassified(Holder holder, List<HolderSelector> hs,
-			RuleSet value) {
+	private void insertClassified(Holder holder, List<HolderSelector> hs, RuleSet value) {
+	    value.setOrder(currentOrder++);
 		for (HolderSelector h : hs)
 			holder.insert(h.item, h.key, value);
 	}

@@ -133,14 +133,19 @@ public class DirectAnalyzer extends Analyzer
         // others
         candidates.addAll(holder.get(HolderItem.OTHER, null));
 
+        // transform to list to speed up traversal
+        // and sort rules in order as they were found in CSS definition
+        List<RuleSet> clist = new ArrayList<RuleSet>(candidates);
+        Collections.sort(clist);
+        
         log.debug("Totally {} candidates.", candidates.size());
-        log.trace("With values: {}", candidates);
+        log.trace("With values: {}", clist);
 
         // resulting list of declaration for this element with no pseudo-selectors (main list)(local cache)
         List<Declaration> eldecl = new ArrayList<Declaration>();
         
         // for all candidates
-        for (RuleSet rule : candidates) {
+        for (RuleSet rule : clist) {
             
             StyleSheet sheet = rule.getStyleSheet();
             StyleSheet.Origin origin = (sheet == null) ? StyleSheet.Origin.AGENT : sheet.getOrigin();

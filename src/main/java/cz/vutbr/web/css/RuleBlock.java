@@ -7,7 +7,7 @@ package cz.vutbr.web.css;
  *
  * @param <T> Internal content of rule
  */
-public interface RuleBlock<T> extends Rule<T>{
+public interface RuleBlock<T> extends Rule<T>, Comparable<RuleBlock<?>> {
 
 	/**
 	 * Sets the owner style sheet for this rule.
@@ -20,5 +20,17 @@ public interface RuleBlock<T> extends Rule<T>{
 	 * @return The stylesheet.
 	 */
 	public StyleSheet getStyleSheet();
+	
+    /**
+     * Sets the order of the rule in the style sheet.
+     * @param order the order (0 for the first rule etc.)
+     */
+    public void setOrder(int order);
+    
+    /**
+     * Obtains the order of the rule in the style sheet.
+     * @return the order of the rule or -1 when not set
+     */
+	public int getOrder();
 	
 }
